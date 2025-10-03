@@ -1,5 +1,6 @@
-load("@llvm-project//mlir:tblgen.bzl", "gentbl_cc_library", "td_library")
+load("@llvm-project//mlir:tblgen.bzl", "gentbl_cc_library", "gentbl_filegroup", "td_library")
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("@rules_python//python:defs.bzl", "py_library")
 load("//xla:xla.default.bzl", "xla_cc_test")
 load("//xla/tsl:tsl.bzl", "internal_visibility")
 load("//xla/tsl:tsl.default.bzl", "get_compatible_with_portable", "tsl_pybind_extension")
@@ -133,11 +134,27 @@ cc_library(
 )
 
 cc_library(
+    name = "ifrt_capi",
+    srcs = ["ifrt_capi.cc"],
+    hdrs = ["ifrt_capi.h"],
+    compatible_with = get_compatible_with_portable(),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":ir",
+        "@llvm-project//llvm:Support",
+        "@llvm-project//mlir:CAPIIR",
+        "@llvm-project//mlir:IR",
+    ],
+)
+
+cc_library(
     name = "sharding_param",
     srcs = ["sharding_param.cc"],
     hdrs = ["sharding_param.h"],
     compatible_with = get_compatible_with_portable(),
-    visibility = ["//xla/python/ifrt:users"],
+    visibility = [
+        "//visibility:public",
+    ],
     deps = [
         ":sharding_param_proto_cc",
         "//xla/python/ifrt:serdes_default_version_accessor",
@@ -543,4 +560,40 @@ cc_library(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
     ],
+)
+
+gentbl_filegroup(
+    name = "ifrt_ops_py_gen",
+    tbl_outs = [
+        (
+            [
+                "-gen-python-op-bindings",
+                "-bind-dialect=ifrt",
+            ],
+            "_ifrt_ops_gen.py",
+        ),
+    ],
+    tblgen = "@llvm-project//mlir:mlir-tblgen",
+    td_file = "ifrt_ops_py.td",
+    deps = [
+        ":ifrt_td",
+        "@llvm-project//mlir:OpBaseTdFiles",
+    ],
+)
+
+filegroup(
+    name = "ifrt_ops_py_files",
+    srcs = [
+        "ifrt.py",
+        ":ifrt_ops_py_gen",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "ifrt_module_files",
+    srcs = [
+        "ifrt_module.cc",
+    ],
+    visibility = ["//visibility:public"],
 )

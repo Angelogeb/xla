@@ -39,7 +39,9 @@ cc_library(
     srcs = ["sharding_conversions.cc"],
     hdrs = ["sharding_conversions.h"],
     compatible_with = get_compatible_with_portable(),
-    visibility = ["//xla/python/ifrt:users"],
+    visibility = [
+        "//visibility:public",
+    ],
     deps = [
         "//xla:xla_data_proto_cc",
         "//xla/hlo/ir:hlo",
