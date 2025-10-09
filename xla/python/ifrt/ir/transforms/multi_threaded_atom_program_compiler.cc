@@ -63,7 +63,8 @@ namespace {
 // Lazily initialized shared thread pool.
 tsl::thread::ThreadPool* thread_pool() {
   static tsl::thread::ThreadPool* thread_pool = []() {
-    constexpr int kMaxParallelism = 32;
+    // constexpr int kMaxParallelism = 32; TODO: the cuda backend doesn't support parallel compilation
+    constexpr int kMaxParallelism = 1;
     return new tsl::thread::ThreadPool(tsl::Env::Default(),
                                        tsl::ThreadOptions(),
                                        "CompileAtomPrograms", kMaxParallelism);

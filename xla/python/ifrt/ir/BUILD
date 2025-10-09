@@ -114,7 +114,7 @@ cc_library(
         "ifrt_ops.h",
     ],
     compatible_with = get_compatible_with_portable(),
-    visibility = ["//xla/python/ifrt:users"],
+    visibility = ["//visibility:public"],
     deps = [
         ":ifrt_dialect_inc_gen",
         ":ifrt_interfaces_inc_gen",
@@ -180,7 +180,7 @@ cc_library(
     srcs = ["ifrt_ir_program.cc"],
     hdrs = ["ifrt_ir_program.h"],
     compatible_with = get_compatible_with_portable(),
-    visibility = ["//xla/python/ifrt:users"],
+    visibility = ["//visibility:public"],
     deps = [
         ":ifrt_ir_compile_options_proto_cc",
         "//xla/pjrt:pjrt_executable",
@@ -309,7 +309,7 @@ cc_library(
     srcs = ["basic_atom_program_compiler.cc"],
     hdrs = ["basic_atom_program_compiler.h"],
     compatible_with = get_compatible_with_portable(),
-    visibility = ["//xla/python/ifrt:friends"],
+    visibility = ["//visibility:public"],
     deps = [
         ":atom_program_compiler",
         ":ir",
@@ -482,7 +482,7 @@ cc_library(
     srcs = ["compiled_ifrt_ir_program.cc"],
     hdrs = ["compiled_ifrt_ir_program.h"],
     compatible_with = get_compatible_with_portable(),
-    visibility = ["//xla/python/ifrt:users"],
+    visibility = ["//visibility:public"],
     deps = [
         ":atom_program_compiler",
         ":ifrt_ir_program",
@@ -519,7 +519,7 @@ cc_library(
     srcs = ["program_interpreter.cc"],
     hdrs = ["program_interpreter.h"],
     compatible_with = get_compatible_with_portable(),
-    visibility = ["//xla/python/ifrt:users"],
+    visibility = ["//visibility:public"],
     deps = [
         ":compiled_ifrt_ir_program",
         ":ir",
